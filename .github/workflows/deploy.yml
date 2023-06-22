@@ -54,4 +54,5 @@ jobs:
           kubectl apply -f k8s/00-aws-auth.yml
           kubectl apply -f k8s/01-namespace.yml
           kubectl apply -n frontend -f k8s/02-deployment.yml
+          kubectl -n frontend rollout restart deploy webapp
           kubectl apply -n frontend -f k8s/03-loadbalancer.yml
