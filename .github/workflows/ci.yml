@@ -1,0 +1,51 @@
+name: 👨‍💻 CI
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 😌 Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: 📝 List the state of node modules
+        continue-on-error: true
+        run: npm list
+
+      - name: 📥 Install dependencies
+        run: npm install
+
+      - name: 🔬 Lint
+        run: npm run lint
+
+      - name: 💙 Type check
+        run: npm run type-check
+      
+      - name: ⚡ Run tests
+        run: npm run test:coverage
+
+      - name: 📦 Build
+        run: npm run build
