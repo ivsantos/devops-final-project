@@ -17,6 +17,12 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
 
+      - name: 🤖 Install kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'default'
+        id: install
+
       - name: 🔑 Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -36,3 +42,9 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
+      - name: 👨🏼‍🏭 Update Kubernetes cluster
+        run: |
+          kubectl apply -f k8s/00-aws-auth.yml
+          kubectl apply -f k8s/01-namespace.yml
+          kubectl apply -f k8s/02-deployment.yml
+          kubectl apply -f k8s/03-loadbalancer.yml
