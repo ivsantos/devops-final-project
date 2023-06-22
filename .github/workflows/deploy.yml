@@ -25,11 +25,12 @@ jobs:
         with:
           version: 'v1.27.3'
         id: install
-
-      - name: 🔑 Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::475736794118:role/github.to.aws.oidc
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: 🔐 Login to Amazon ECR
@@ -50,9 +51,7 @@ jobs:
 
       - name: 👨🏼‍🏭 Update Kubernetes cluster
         run: |
-          kubectl config current-context
-          kubectl cluster-info
-          kubectl get nodes
+          kubectl apply -f k8s/00-aws-auth.yml
           kubectl apply -f k8s/01-namespace.yml
           kubectl apply -f k8s/02-deployment.yml
           kubectl apply -f k8s/03-loadbalancer.yml
