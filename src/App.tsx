@@ -23,6 +23,7 @@ export default function App() {
       <button className={styles.fireButton} onClick={handleLoadBrokenComponent}>
         🔥 Break the app 🔥
       </button>
+      {/* @ts-expect-error Breaks app deliberately */}
       {error && <BrokenComponent />}
       <Confetti recycle={false} />
     </>
