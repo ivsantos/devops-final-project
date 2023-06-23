@@ -1,6 +1,6 @@
 name: 🚀 Deploy
 
-on: 
+on:
   push:
     branches:
       - main
@@ -14,7 +14,7 @@ env:
 
 jobs:
   build:
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
@@ -25,7 +25,7 @@ jobs:
         with:
           version: 'v1.27.3'
         id: install
-      
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
