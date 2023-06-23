@@ -19,7 +19,7 @@ export default function App() {
   return (
     <>
       <h1 className={styles.title}>Hello! 🐱</h1>
-      <button onClick={() => throwKnownError()}>🔴 Throw controlled error 🔴</button>
+      <button onClick={throwKnownError}>🔴 Throw controlled error 🔴</button>
       <button className={styles.fireButton} onClick={handleLoadBrokenComponent}>
         🔥 Break the app 🔥
       </button>
