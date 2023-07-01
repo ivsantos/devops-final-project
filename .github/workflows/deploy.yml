@@ -10,7 +10,9 @@ permissions:
   contents: read
 
 env:
+  AWS_CLUSTER_NAME: webapp-cluster
   AWS_REGION: eu-west-1
+  K8S_NAMESPACE: frontend
 
 jobs:
   build:
@@ -47,12 +49,13 @@ jobs:
           docker push -a $REGISTRY/$REPOSITORY
 
       - name: 📝 Update kube config
-        run: aws eks update-kubeconfig --name webapp-cluster --region $AWS_REGION
+        run: aws eks update-kubeconfig --name $AWS_CLUSTER_NAME --region $AWS_REGION
 
       - name: 👨🏼‍🏭 Update Kubernetes cluster
         run: |
           kubectl apply -f k8s/00-aws-auth.yml
           kubectl apply -f k8s/01-namespace.yml
-          kubectl apply -n frontend -f k8s/02-deployment.yml
-          kubectl -n frontend rollout restart deploy webapp
-          kubectl apply -n frontend -f k8s/03-loadbalancer.yml
+          kubectl apply -n $K8S_NAMESPACE -f k8s/02-deployment.yml
+          kubectl apply -n $K8S_NAMESPACE -f k8s/03-loadbalancer.yml
+          : # Restart deployment to force image pull. This will not introduce downtime as it kills one pod at a time.
+          kubectl -n $K8S_NAMESPACE rollout restart deploy webapp

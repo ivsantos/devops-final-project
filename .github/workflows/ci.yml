@@ -43,9 +43,15 @@ jobs:
 
       - name: 💙 Type check
         run: npm run type-check
-      
+
       - name: ⚡ Run tests
         run: npm run test:coverage
+
+      - name: 🦄 Quality
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: 📦 Build
         run: npm run build
