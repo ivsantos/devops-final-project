@@ -30,7 +30,7 @@ Aplicar los siguientes manifests:
 kubectl apply -f k8s/01-namespace.yml
 ```
 
-02-deployment.yml → Usa la imagen de la aplicación previamente buildeada para crear 3 pods en el nodo, exponiendo el puerto 80 en cada uno de ellos.```
+02-deployment.yml → Usa la imagen de la aplicación previamente buildeada para crear 3 pods en el nodo, exponiendo el puerto 80 en cada uno de ellos.
 
 > **_NOTA:_** Hay que cambiar el parámetro de `imagePullPolicy` a `Never` en local ya que es un parámetro asociado a la infraestructura en el cloud, en este caso, para el alojamiento de contenedores de AWS (ECR).
 
